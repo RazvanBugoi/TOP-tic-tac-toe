@@ -1,0 +1,32 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+
+  /* font-family: 'Merriweather', serif;
+  font-family: 'Roboto', sans-serif; */
+}
+
+body {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.main {
+  width: 600px;
+  height: 600px;
+  border: 2px solid red;
+}
+
+.table__header {
+  border: 1px solid black;
+  display: flex;
+  align-items: center;
+}
+
+.table__header--status {
+  flex-grow: 1;
+}
