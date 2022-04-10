@@ -35,3 +35,18 @@
   align-content: center;
   font-size: var(--sign-size);
 }
+
+#header {
+  text-align: center;
+  font-size: 2em;
+  border: 1px solid black;
+}
+
+footer {
+  text-align: center;
+}
+
+footer > button {
+  padding: 5px 20px 5px 20px;
+  margin-top: 20px;
+}

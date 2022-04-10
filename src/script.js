@@ -2,31 +2,36 @@ const game = (() => {
   let gameboard = ["", "", "", "", "", "", "", "", ""];
   let currentPlayer = "X";
   let cellElemenets = Array.from(document.querySelectorAll(".cell"));
+  const resetButton = document.getElementById("reset-button")
+  const header = document.getElementById("header")
 
-  cellElemenets.forEach((cell) => {
-    cell.addEventListener("click", handleClick, { once: true })
-  })
-
+  resetButton.addEventListener("click", resetGame)
+  
+  function startGame() {
+    cellElemenets.forEach((cell) => {
+      cell.addEventListener("click", handleClick)
+    })
+  }
+    
   function handleClick(e) {
     const cell = e.target
     const cellIndex = e.target.dataset.index
-    
+      
     gameboard[cellIndex] = currentPlayer;
-    cell.textContent = currentPlayer;
-
-    // Check for Win
-    checkWinner(cell)
-    // Check for Draw
-    // Switch Turns
-    switchTurn()
-  
-
-
-
+    if (cell.textContent.length == 0) {
+      cell.textContent = currentPlayer;
+    } else {
+      return
+    }
     
+    checkWinner()
+    switchTurn()
   }
 
-  function checkWinner(cell) {
+
+
+
+  function checkWinner() {
     const winningCombinations = [
     [0, 1, 2],
     [3, 4, 5],
@@ -43,7 +48,13 @@ const game = (() => {
       
       if (gameboard[a] && (gameboard[a] === gameboard[b] && gameboard[a] === gameboard[c])) {
         stopGame()
-        return combination
+        header.textContent = `Player ${currentPlayer} has won!`
+        header.style.color = "green"
+        return
+      } else if (!gameboard.includes("") && !(gameboard[a] && (gameboard[a] === gameboard[b] && gameboard[a] === gameboard[c]))) {
+        header.textContent = `This is a draw!`
+        header.style.color = "orange"
+        return
       }
 
     }
@@ -53,20 +64,31 @@ const game = (() => {
 
   function switchTurn() {
     currentPlayer === "X" ? currentPlayer = "O" : currentPlayer = "X"
+    header.textContent = `Player ${currentPlayer}'s Turn`
   }
 
   function stopGame() {
+    cellElemenets.forEach((cell) => cell.removeEventListener("click", handleClick))
+    console.log(`We have a winner, Player ${currentPlayer} has won!`)
+    header.textContent = `Player ${currentPlayer} has won!`
+    header.style.color = "green"
+  }
+
+  function resetGame() {
     gameboard = ["", "", "", "", "", "", "", "", ""];
-    cellElemenets.forEach((cell) => cell.style.pointerEvents = "none")
-    console.log("We have a winner, game has finished!")
+    currentPlayer = "X"
+    cellElemenets.forEach( (cell) => cell.textContent = '' )
+   
+    startGame()
   }
   
   return {
     gameboard,
-    currentPlayer
+    currentPlayer,
+    startGame,
+    resetGame
   }
 })();
 
-console.log(game.gameboard)
 
-
+game.startGame()
