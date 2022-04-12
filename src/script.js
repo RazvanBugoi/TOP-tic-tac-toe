@@ -4,6 +4,17 @@ const game = (() => {
   let cellElemenets = Array.from(document.querySelectorAll(".cell"));
   const resetButton = document.getElementById("reset-button")
   const header = document.getElementById("header")
+  let winner = false;
+  const winningCombinations = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+    ]
 
   resetButton.addEventListener("click", resetGame)
   
@@ -25,36 +36,34 @@ const game = (() => {
     }
     
     checkWinner()
-    switchTurn()
+
+    if (winner == false) {
+      switchTurn()
+    }
+
   }
 
 
 
 
   function checkWinner() {
-    const winningCombinations = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8],
-    [2, 4, 6]
-    ]
 
     for (const combination of winningCombinations) {
       const [a, b, c] = combination
       
       if (gameboard[a] && (gameboard[a] === gameboard[b] && gameboard[a] === gameboard[c])) {
+        winner = true
         stopGame()
+        console.log(combination)
         header.textContent = `Player ${currentPlayer} has won!`
         header.style.color = "green"
         return
+
       } else if (!gameboard.includes("") && !(gameboard[a] && (gameboard[a] === gameboard[b] && gameboard[a] === gameboard[c]))) {
-        header.textContent = `This is a draw!`
-        header.style.color = "orange"
-        return
+          winner = true
+          header.textContent = `This is a draw!`
+          header.style.color = "orange"
+          return
       }
 
     }
@@ -78,7 +87,8 @@ const game = (() => {
     gameboard = ["", "", "", "", "", "", "", "", ""];
     currentPlayer = "X"
     cellElemenets.forEach( (cell) => cell.textContent = '' )
-   
+    header.style.color = "black"
+    winner = false
     startGame()
   }
   
