@@ -20,7 +20,7 @@ const game = (() => {
   
   function startGame() {
     cellElemenets.forEach((cell) => {
-      cell.addEventListener("click", handleClick)
+      cell.addEventListener("click", handleClick, {once: true})
     })
   }
     
@@ -36,6 +36,7 @@ const game = (() => {
     }
     
     checkWinner()
+    checkDraw()
 
     if (winner == false) {
       switchTurn()
@@ -51,25 +52,30 @@ const game = (() => {
     for (const combination of winningCombinations) {
       const [a, b, c] = combination
       
-      if (gameboard[a] && (gameboard[a] === gameboard[b] && gameboard[a] === gameboard[c])) {
+      if (gameboard[a] && gameboard[a] === gameboard[b] && gameboard[a] === gameboard[c] && gameboard[b] === gameboard[c]) {
         winner = true
         stopGame()
         console.log(combination)
-        header.textContent = `Player ${currentPlayer} has won!`
-        header.style.color = "green"
+        console.log(gameboard)
         return
+      }
+    }
+  }
 
-      } else if (!gameboard.includes("") && !(gameboard[a] && (gameboard[a] === gameboard[b] && gameboard[a] === gameboard[c]))) {
+  function checkDraw() {
+    for (const combination of winningCombinations) {
+      const [a, b, c] = combination
+    
+      if (!gameboard.includes("") && !winner) {
           winner = true
           header.textContent = `This is a draw!`
           header.style.color = "orange"
+          console.log(gameboard)
           return
       }
-
     }
-
-    return null
   }
+
 
   function switchTurn() {
     currentPlayer === "X" ? currentPlayer = "O" : currentPlayer = "X"
